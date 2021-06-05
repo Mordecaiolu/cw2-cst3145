@@ -160,33 +160,22 @@
                         return true;
                     }  
                 },
-                getLessons() {
-                    // retrives all lessons with GET 
-                    fetch('https://afterschoollessons.herokuapp.com/')
-                    .then(response => response.json())
-                    .then(data => this.lessons = data)
-                    .catch(err => console.log(err));
-                },
-                saveOrder(body) {
-                    fetch('https://afterschoollessons.herokuapp.com/order', {
-                        method: 'POST',
-                        headers: {'Content-Type' : 'application/json'},
-                        body: JSON.stringify(body)
-                    })
-                    .then(response => response.json())
-                    .then(data => {return data }).catch(err => {return data});
-                },
-                updateSpace(id, quantity) {
-                    fetch('https://afterschoollessons.herokuapp.com/' + id, {
-                        method: 'PUT',
+                submit() {
+                    fetch('https://afterschoollessons.herokuapp.com/collection/order', {
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
+                            "content-Type": 'application/json',
                         },
-                        body: JSON.stringify(
-                            {
-                                "availableInventory": quantity
-                            }
-                        )
+                        mode: "cors",
+                        cache: "no-store",
+                        body: JSON.stringify(app.user)
+                    }).then(Response => response.json())
+                    .then(ResponseJSON => { })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                    app.lessons.forEach(lesson=>{
+                        if(lesson.availableInventory!=0) lesson.availableInventory -=this.cartCount(lesson._id)
                     })
                 }
             },
@@ -230,7 +219,17 @@
                     }
                 }
             },
-            created() {
+            created: function() {
+                console.log("collecting lessons from the database...")
+                fetch("https://afterschoollessons.herokuapp.com/collecction/lessons").then(
+                    function (res) {
+                        res.json().then(
+                            function (json) {
+                                app.lesson = json;
+                            }
+                        )
+                    }
+                )
                 this.lessons = lessons
             }
 
