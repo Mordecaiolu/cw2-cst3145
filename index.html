@@ -160,24 +160,38 @@
                         return true;
                     }  
                 },
-                submit() {
+                //calls all lessons from my mongodb
+                retiveLessons()
+                {
+                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons')
+                    .then(response => response.json())
+                    .then(data => this.lesson = data)
+                    .catch(error => console.log(error));
+                },
+                // adds new orders to mongodb order collection
+                addOrder(body)
+                {
                     fetch('https://afterschoollessons.herokuapp.com/collection/order', {
-                        method: "POST",
-                        headers: {
-                            "content-Type": 'application/json',
-                        },
-                        mode: "cors",
-                        cache: "no-store",
-                        body: JSON.stringify(app.user)
-                    }).then(Response => response.json())
-                    .then(ResponseJSON => { })
-                    .catch((error) => {
-                        console.log(error);
-                    })
-                    app.lessons.forEach(lesson=>{
-                        if(lesson.availableInventory!=0) lesson.availableInventory -=this.cartCount(lesson._id)
-                    })
-                }
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify(body)
+                    }).then(response => response.json())
+                    .then(data => {return data }).catch(err => {return data});
+                },
+                // updates the available spaces in lesson
+                updateAvailablility(id, quantity)
+                {
+                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons/' +id, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                "availableSpaces": quantity
+                            }
+                        )
+                    }).then(response => response.json())
+                    .then(data => {return data }).catch(err => { return data });
+                },
             },
             computed: {
                 total() {
@@ -219,17 +233,7 @@
                     }
                 }
             },
-            created: function() {
-                console.log("collecting lessons from the database...")
-                fetch("https://afterschoollessons.herokuapp.com/collecction/lessons").then(
-                    function (res) {
-                        res.json().then(
-                            function (json) {
-                                app.lesson = json;
-                            }
-                        )
-                    }
-                )
+            created() {
                 this.lessons = lessons
             }
 
