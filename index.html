@@ -160,39 +160,73 @@
                         return true;
                     }  
                 },
-                //calls all lessons from my mongodb
-                retiveLessons()
-                {
-                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons')
-                    .then(response => response.json())
-                    .then(data => this.lesson = data)
-                    .catch(error => console.log(error));
+               // retrives lessons from mongodb collection
+                created: function () {
+                    console.log("collecting from database...")
+                fetch('https://afterschoollessons.herokuapp.com/collection/lessons').then(
+                    function (res) {
+                        res.json().then(
+                            function (json) {
+                                app.lessons = json;
+                            }
+                        )
+                    }
+                )
                 },
-                // adds new orders to mongodb order collection
-                addOrder(body)
-                {
-                    fetch('https://afterschoollessons.herokuapp.com/collection/order', {
-                        method: 'POST',
-                        headers: { 'Content-Type' : 'application/json'},
-                        body: JSON.stringify(body)
-                    }).then(response => response.json())
-                    .then(data => {return data }).catch(err => {return data});
+                // new order to the order collection
+                submit() {
+                    let name = document.getElementById('txt-username').value;
+                    let phone = document.getElementById('txt-phone').value;
+
+                    fetch('https://afterschoollessons.herokuapp.com/collection/orders', {
+                        method: "POST",
+                        header: {
+                            "content-Type": "application/json",
+                        },
+                        mode: "cors",
+                        cache: "no-cache",
+                        body: JSON.stringify({
+                            name,
+                            phone,
+                        })
+                    }).then(response =>response.json)
+                    .then(responseJSON => {
+                        console.log("Created order: ", responseJSON);
+                        let availableInventory = document.getElementById('space').vaule;
+                        fetch('https://afterschoollessons.herokuapp.com/collection/lessons').then(
+                            function (res) {
+                                res.json().then(
+                                    function (json) {
+                                        app.lessons = json;
+
+                                        app.lessons. forEach(lesson => {
+                                            if (lessson.availableInventory != 0) {
+                                                lesson.availableInventory -= this.cartcount(lesson.id)
+                                            }
+                                        });
+                                    }
+                                )
+                            }
+                        )
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
                 },
-                // updates the available spaces in lesson
-                updateAvailablility(id, quantity)
-                {
-                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons/' +id, {
+                //upadtes available spaces in lesson
+                updateAvailability(id, quantity) {
+                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons/'+id, {
                         method: 'PUT',
-                        headers: { 'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(
                             {
-                                "availableSpaces": quantity
+                                "availableInventory": quantity
                             }
                         )
                     }).then(response => response.json())
-                    .then(data => {return data }).catch(err => { return data });
-                },
+                    .then(data => { return data }).catch(err => { return data });                }
             },
+        
             computed: {
                 total() {
                     return this.cart.length > 0 ? this.cart.map(item => item.price).reduce((acc, cur) => acc + cur) : 0;
