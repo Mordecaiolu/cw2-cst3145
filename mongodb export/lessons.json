@@ -1,0 +1,115 @@
+[{
+  "_id": {
+    "$oid": "60b99421d9ade934c8c66f30"
+  },
+  "id": 101,
+  "subject": "Art",
+  "location": "Abuja",
+  "price": 69,
+  "availableInventory": 5,
+  "image": "images/art.jpg"
+},{
+  "_id": {
+    "$oid": "60b994d4d9ade934c8c66f31"
+  },
+  "id": 102,
+  "subject": "Math",
+  "location": "Lagos",
+  "price": 550,
+  "availableInventory": 5,
+  "image": "images/Math.JPEG"
+},{
+  "_id": {
+    "$oid": "60b994eed9ade934c8c66f32"
+  },
+  "id": 103,
+  "subject": "ICT",
+  "location": "Ilorin",
+  "price": 650,
+  "availableInventory": 5,
+  "image": "images/ict.jpg"
+},{
+  "_id": {
+    "$oid": "60b9950fd9ade934c8c66f33"
+  },
+  "id": 104,
+  "subject": "English",
+  "location": "Abuja",
+  "price": 350,
+  "availableInventory": 5,
+  "image": "images/english.jpg"
+},{
+  "_id": {
+    "$oid": "60b99525d9ade934c8c66f34"
+  },
+  "id": 105,
+  "subject": "French",
+  "location": "Lagos",
+  "price": 350,
+  "availableInventory": 5,
+  "image": "images/french.jpg"
+},{
+  "_id": {
+    "$oid": "60b99a05d9ade934c8c66f35"
+  },
+  "id": 106,
+  "subject": "Geography",
+  "location": "Abuja",
+  "price": 450,
+  "availableInventory": 5,
+  "image": "images/geo.jpg"
+},{
+  "_id": {
+    "$oid": "60b99a18d9ade934c8c66f36"
+  },
+  "id": 107,
+  "subject": "Literature",
+  "location": "Lagos Island",
+  "price": 400,
+  "availableInventory": 5,
+  "image": "images/lit.jpg"
+},{
+  "_id": {
+    "$oid": "60b99a2dd9ade934c8c66f37"
+  },
+  "id": 108,
+  "subject": "Physics",
+  "location": "Abuja",
+  "price": 450,
+  "availableInventory": 5,
+  "image": "images/physics.jpg"
+},{
+  "_id": {
+    "$oid": "60b99a7bd9ade934c8c66f38"
+  },
+  "id": 109,
+  "subject": "Chemistry",
+  "location": "Ilorin",
+  "price": 550,
+  "availableInventory": 5,
+  "image": "images/chem.jpg"
+},{
+  "_id": {
+    "$oid": "60b99ad2d9ade934c8c66f3a"
+  },
+  "id": 110,
+  "subject": "Music",
+  "location": "Abuja",
+  "price": 300,
+  "availableInventory": 5,
+  "image": "images/music.jpg"
+},{
+  "_id": {
+    "$oid": "60b9a1368726fd1ff8c88055"
+  },
+  "id": 111,
+  "title": "new lesson",
+  "price": 89
+},{
+  "_id": {
+    "$oid": "60b9a14e8726fd1ff8c88056"
+  },
+  "id": 111,
+  "title": "new lesson",
+  "price": 89
+}]

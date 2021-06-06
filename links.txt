@@ -1,0 +1,7 @@
+github backend link: https://github.com/Mordecaiolu/cw2-cst3145
+
+github frontend deployed link: https://mordecaiolu.github.io/cw2-cst3145/index1.html
+
+heroku app: https://afterschoollessons.herokuapp.com
+heroku app lessons: https://afterschoollessons.herokuapp.com/collection/lessons
+heroku app order: https://afterschoollessons.herokuapp.com/collection/order
