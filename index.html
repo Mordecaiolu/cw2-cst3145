@@ -173,58 +173,46 @@
                     }
                 )
                 },
-                // new order to the order collection
-                submit() {
-                    let name = document.getElementById('txt-username').value;
-                    let phone = document.getElementById('txt-phone').value;
 
+                  submit() {
+
+                  let checkoutData = []
+                  this.cart.forEach((item)=>{
+                    checkoutData.push({name:this.user.name,number:this.user.number,availableInventory:item.availableInventory,subject:item.subject})
+                    this.updateAvailability(item.id, item.availableInventory);
+                })
                     fetch('https://afterschoollessons.herokuapp.com/collection/order', {
-                        method: "POST",
-                        header: {
-                            "content-Type": "application/json",
-                        },
-                        mode: "cors",
-                        cache: "no-cache",
-                        body: JSON.stringify({
-                            name,
-                            phone,
+                        method: "post",
+                        body: JSON.stringify(checkoutData),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    }).then((data) => {
+                        data.json().then((response) => {
+                            console.log(response)
                         })
-                    }).then(response =>response.json)
-                    .then(responseJSON => {
-                        console.log("Created order: ", responseJSON);
-                        let availableInventory = document.getElementById('space').vaule;
-                        fetch('https://afterschoollessons.herokuapp.com/collection/lessons').then(
-                            function (res) {
-                                res.json().then(
-                                    function (json) {
-                                        app.lessons = json;
-
-                                        app.lessons. forEach(lesson => {
-                                            if (lessson.availableInventory != 0) {
-                                                lesson.availableInventory -= this.cartcount(lesson.id)
-                                            }
-                                        });
-                                    }
-                                )
-                            }
-                        )
+                    }).catch((err) => {
+                        console.log(err)
                     })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+
+                    app.lessons.forEach(lesson => {
+                        if (lesson.availableInventory != 0) lesson.availableInventory -= this.cartcount(lesson.id)
+                    })
                 },
-                //upadtes available spaces in lesson
+                //this method update the lessons available spaces
                 updateAvailability(id, quantity) {
-                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons/'+id, {
+                    fetch('https://afterschoollessons.herokuapp.com/collection/lessons' + id, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(
                             {
-                                "availableInventory": quantity
+                                "availableSpaces": quantity
                             }
                         )
                     }).then(response => response.json())
-                    .then(data => { return data }).catch(err => { return data });                }
+                        .then(data => { return data }).catch(err => { return data });
+                },
+
             },
         
             computed: {
