@@ -1,15 +1,10 @@
-const bodyParser = require('body-parser')
 const express = require('express')
 const { ObjectID } = require('mongodb')
 // const bodyParser = require('body-parser')
 
 // Create an Express.js instance:
-const bodyParser = require('body-parser');
-var cors = require('cors')
 const app = express()
-app.use(cors())
-app.use(bodyParser.json({limit: '5000kb'}))
-//express.js
+
 app.use(express.json())
 app.set('port', 3000)
 app.use ((req,res, next) => {
@@ -56,15 +51,6 @@ app.post('/collection/:collectionName', (req, res, next) => {
         if (e) return next(e)
         else res.send(results.ops)
     })
-})
-// return with object id 
-const ObjectID = require('mongodb').ObjectID;
-app.get('/collection/:collectionName/:id'
-, (req, res, next) => {
-req.collection.findOne({ _id: new ObjectID(req.params.id) }, (e, result) => {
-if (e) return next(e)
-res.send(result)
-})
 })
 // put
 app.put('/collection/:collectionName/:id', (req, res, next) => {
