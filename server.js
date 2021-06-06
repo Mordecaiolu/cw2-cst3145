@@ -3,8 +3,13 @@ const { ObjectID } = require('mongodb')
 // const bodyParser = require('body-parser')
 
 // Create an Express.js instance:
-const app = express()
+const bodeParser = require('body-parser');
+var cors = require('cors')
+const app = express();
+app.use(cors())
+app.use(bodeParser.json({limit: '5000kb'}))
 
+//express.js
 app.use(express.json())
 app.set('port', 3000)
 app.use ((req,res, next) => {
