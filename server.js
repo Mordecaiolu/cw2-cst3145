@@ -1,3 +1,4 @@
+
 const express = require('express')
 const { ObjectID } = require('mongodb')
 // const bodyParser = require('body-parser')
@@ -12,30 +13,37 @@ app.use(bodeParser.json({limit: '5000kb'}))
 //express.js
 app.use(express.json())
 app.set('port', 3000)
-app.use ((req,res, next) => {
+app.use ((_req,res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 })
-
+app.use(
+    function(_request, response) {    
+        response.writeHead(200, { "Content-Type": "text/plain" });    
+        response.end("Looks like you didn’t find a static file.");
+    });
+app.get("/images/:id/photo", function(req, res) {    
+    res.sendFile(getProfilePhoto(req.params.id));
+});
 // connect to MongoDB
 
 const MongoClient = require('mongodb').MongoClient;
 
 let db;
 
-MongoClient.connect('mongodb+srv://Mordecai:tomisin.@cluster0.j9uqx.mongodb.net/test', (err, client) => {
+MongoClient.connect('mongodb+srv://Mordecai:tomisin.@cluster0.j9uqx.mongodb.net/test', (_err, client) => {
 
     db = client.db('school')
 
 })
 
 // display a message for root path to show that API is working
-app.get('/', (req, res, next) => {
+app.get('/', (_req, res, _next) => {
     res.send('select a collection, e.g., /collection/messages')
 })
 
 // get the collection name
-app.param('collectionName', (req, res, next, collectionName) => {
+app.param('collectionName', (req, _res, next, collectionName) => {
     req.collection = db.collection(collectionName)
     // console.log('collection name:', req.collection)
     return next()
