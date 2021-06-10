@@ -17,7 +17,7 @@ app.use ((_req,res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 })
-    
+
 // connect to MongoDB
 
 const MongoClient = require('mongodb').MongoClient;
@@ -78,6 +78,15 @@ app.delete('/collection/:collectionName/:id', (req, res, next) => {
             {msg: 'success'} : {msg: 'error'})
         })
 })
+
+app.use(
+    function(_request, response) {    
+        response.writeHead(200, { "Content-Type": "text/plain" });    
+        response.end("Looks like you didn’t find a static file.");
+    });
+app.get("/images/:id/photo", function(req, res) {    
+    res.sendFile(getProfilePhoto(req.params.id));
+});
 
 const port = process.env.PORT || 3000
 app.listen(port)
