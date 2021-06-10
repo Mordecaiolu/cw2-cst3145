@@ -17,14 +17,7 @@ app.use ((_req,res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 })
-app.use(
-    function(_request, response) {    
-        response.writeHead(200, { "Content-Type": "text/plain" });    
-        response.end("Looks like you didn’t find a static file.");
-    });
-app.get("/images/:id/photo", function(req, res) {    
-    res.sendFile(getProfilePhoto(req.params.id));
-});
+    
 // connect to MongoDB
 
 const MongoClient = require('mongodb').MongoClient;
