@@ -186,23 +186,22 @@
                     this.updateAvailability(item.id, item.availableInventory);
                 })
                     fetch('https://afterschoollessons.herokuapp.com/collection/order', {
-                        method: "POST",
-                        body: JSON.stringify(checkoutData),
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    }).then((data) => {
-                        data.json().then((response) => {
-                            console.log(response)
-                        })
-                    }).catch((err) => {
-                        console.log(err)
-                    })
-
-                    app.lessons.forEach(lesson => {
-                        if (lesson.availableInventory != 0) lesson.availableInventory -= this.cartcount(lesson.id)
-                    })
-                },
+                       method: "POST",
+                  body: JSON.stringify(Order),
+                  headers: {
+                   "Content-Type": "application/json",
+                 },
+                 })
+              .then((response) => response.json())
+              .then((res) => {
+                this.updateLessonSpaces();
+                 });
+              },
+              updateLessonSpaces: function () {
+            const lessons = this.cart.map((lesson) => {
+              return { _id: lesson._id, spaces: lesson.spaces };
+            });
+        },
                 //this method update the lessons available spaces
                 updateAvailability(id, quantity) {
                     fetch('https://afterschoollessons.herokuapp.com/collection/lessons' + id, {

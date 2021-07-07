@@ -50,22 +50,22 @@ app.get('/collection/:collectionName', (req, res, next) => {
 })
 // post
 app.post("/collection/:collectionName", (req, res, _next) => {
-  const Orders = req.body;
-  req.collection
-    .insertOne(order)
-    .then((_) => {
-      res.status(200).send({
-        status: true,
-        message: "Order submitted",
+    const Orders = req.body;
+    req.collection
+      .insertOne(Orders)
+      .then((_) => {
+        res.status(200).send({
+          status: true,
+          message: "Order submitted",
+        });
+      })
+      .catch((err) => {
+        res.status(404).send({
+          status: false,
+          message: "Can't submit order due to error from me",
+        });
       });
-    })
-    .catch((err) => {
-      res.status(404).send({
-        status: false,
-        message: "Can't submit order due to error from me",
-      });
-    });
-});
+  });
 // put
 app.put('/collection/:collectionName/:id', (req, res, next) => {
     req. collection.update(
@@ -87,12 +87,14 @@ app.delete('/collection/:collectionName/:id', (req, res, next) => {
         })
 })
 
-  //sends static files from the public path directory
-  app.use('/static/images', express.static(imagePath));
-  app.use(function(request, response,next) {
-      response.writeHead(200, {"Content-Type": "text/plain"});
-      response.end("Erro finding image, please confirm the name");
-      
-  });
+app.use(
+    function(_request, response) {    
+        response.writeHead(200, { "Content-Type": "text/plain" });    
+        response.end("Looks like you didn’t find a static file.");
+    });
+app.get("/images/:id/photo", function(req, res) {    
+    res.sendFile(getProfilePhoto(req.params.id));
+});
+
 const port = process.env.PORT || 3000
 app.listen(port)
