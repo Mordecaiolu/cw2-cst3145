@@ -1,12 +1,10 @@
-
 const express = require('express')
 const { ObjectID } = require('mongodb')
 // const bodyParser = require('body-parser')
 
 // Create an Express.js instance:
 const bodeParser = require('body-parser');
-const cors = require('cors')
-var path = require('path');
+var cors = require('cors')
 const app = express();
 app.use(cors())
 app.use(bodeParser.json({limit: '5000kb'}))
@@ -51,66 +49,25 @@ app.get('/collection/:collectionName', (req, res, next) => {
     })
 })
 // post
-app.post("/collection/:collectionName", (req, res, next) => {
-    const Orders = req.body;
-    req.collection
-      .insertOne(Orders)
-      .then((_) => {
-        res.status(200).send({
-          status: true,
-          message: "Order submitted",
-        });
-      })
-      .catch((err) => {
-        res.status(404).send({
-          status: false,
-          message: "Can't submit order due to error from me",
-        });
-      });
-  });
+app.post('/collection/:collectionName', (req, res, next) => {
+    console.log('data',req.body)
+    req.collection.insert(req.body, (e, results) => {
+        console.log('result',results)
+        if (e) return next(e)
+        else res.send(results.ops)
+    })
+})
 // put
-app.put("/collection/:collectionName", (req, res, next) => {
-    const lessons = req.body.lessons;
-    let ItemCount = 0;
-    lessons.forEach((lesson) => {
-      req.collection
-        .findOne({
-          _id: new ObjectID(lesson._id),
+app.put('/collection/:collectionName/:id', (req, res, next) => {
+    req. collection.update(
+        {_id: new ObjectID(req.params.id)},
+        {$set: req.body},
+        {safe: true, multi: false},
+        (e, result) => {
+            if (e) return next(e)
+            res.send((result.result.n === 1) ? {msg: 'success'} : {msg: 'error'})
         })
-        .then((existingLesson) => {
-          existingLesson.spaces -= lesson.spaces;
-          return existingLesson;
-        })
-        .then((existingLesson) => {
-          return req.collection.updateOne(
-            {
-              _id: new ObjectID(lesson._id),
-            },
-            {
-              $set: {
-                spaces: existingLesson.spaces,
-              },
-            },
-            (err, res) => {
-              if (err) console.error(err);
-            }
-          );
-        })
-        .then(() => {
-          ItemCount++;
-          if (ItemCount == lessons.length) {
-            res.send({
-              message: `${ ItemCount } lessons updated successfully!`,
-              status: true,
-            });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    });
-  });
-
+})
 
 app.delete('/collection/:collectionName/:id', (req, res, next) => {
     req.collection.deleteOne(
@@ -121,11 +78,13 @@ app.delete('/collection/:collectionName/:id', (req, res, next) => {
         })
 })
 
- //sends static files from the public path directory
- app.use('/static/images', express.static(imagePath));
- app.use(function(request, response,next) {
-     response.writeHead(200, {"Content-Type": "text/plain"});
-     response.end("Erro finding image, please confirm the name");
+app.use(
+    function(_request, response) {    
+        response.writeHead(200, { "Content-Type": "text/plain" });    
+        response.end("Looks like you didn’t find a static file.");
+    });
+app.get("/images/:id/photo", function(req, res) {    
+    res.sendFile(getProfilePhoto(req.params.id));
 });
 
 const port = process.env.PORT || 3000
