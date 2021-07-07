@@ -171,13 +171,11 @@
                         }
 
                     )
-                $('#form').submit(function(e) {
-                $('#messages').removeClass('hide').addClass('alert alert-success alert-dismissible').slideDown().show();
-                $('#messages_content').html('Order submitted successfully');
-                $('#modal').modal('show');
-                e.preventDefault();
-            });
-
+                    .then((response) => response.json())
+              .then((res) => {
+                alert("Order submitted successfully!");
+                location.reload();
+              });
 
                 },
                 submit() {
