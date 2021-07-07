@@ -78,14 +78,13 @@ app.delete('/collection/:collectionName/:id', (req, res, next) => {
         })
 })
 
-app.use(
-    function(_request, response) {    
-        response.writeHead(200, { "Content-Type": "text/plain" });    
-        response.end("Looks like you didn’t find a static file.");
-    });
-app.get("/images/:id/photo", function(req, res) {    
-    res.sendFile(getProfilePhoto(req.params.id));
-});
+ //sends static files from the public path directory
+ app.use('/static/images', express.static(imagePath));
+ app.use(function(request, response,next) {
+     response.writeHead(200, {"Content-Type": "text/plain"});
+     response.end("Erro finding image, please confirm the name");
+     
+ });
 
 const port = process.env.PORT || 3000
 app.listen(port)
